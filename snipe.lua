@@ -31,76 +31,97 @@ for i = 1, PlayerInServer do
     end
 end
 
-local message1 = {
-    ['content'] = webContent,
-    ['embeds'] = {
-        {
-            ['title'] = snipeMessage,
-            ['description'] = "A new pet has been sniped!",
-            ['color'] = webcolor,
-            ["timestamp"] = DateTime.now():ToIsoDate(),
-            ['fields'] = {
-                {
-                    ['name'] = "PRICE:",
-                    ['value'] = tostring(gems) .. " GEMS",
-                    ['inline'] = true,
-                },
-                {
-                    ['name'] = "BOUGHT FROM:",
-                    ['value'] = tostring(boughtFrom),
-                    ['inline'] = true,
-                },
-                {
-                    ['name'] = "AMOUNT:",
-                    ['value'] = tostring(amount),
-                    ['inline'] = true,
-                },
-                {
-                    ['name'] = "REMAINING GEMS:",
-                    ['value'] = tostring(gemamount),
-                    ['inline'] = true,
-                },      
-                {
-                    ['name'] = "PET ID:",
-                    ['value'] = tostring(uid),
-                    ['inline'] = true,
-                },
-                {
-                    ['name'] = "VERSION:",
-                    ['value'] = version,
-                    ['inline'] = true,
-                },
-                {
-                    ['name'] = "SHINY:",
-                    ['value'] = shiny and "Yes" or "No",
-                    ['inline'] = true,
-                },
-            },
-            ['thumbnail'] = {
-                ['url'] = "https://media.discordapp.net/attachments/504635309774864389/1190779471062642868/Nakano.png?ex=65a30acd&is=659095cd&hm=bd3487f603d5e1b68727dd36b2a5020d5d448cf66577bff748c22e59fb0ee45a&=&format=webp&quality=lossless&width=447&height=662",  -- Replace with the actual URL to the pet's thumbnail
-            },
-            ['footer'] = {
-                ['text'] = "Happy Sniping!",
-            },
-        },
-    },
-    ['color'] = tonumber(#00FFFF), -- Color of the box around the embed
-}
+local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom, boughtStatus, mention)
+    local gemamount = Players.LocalPlayer.leaderstats["💎 Diamonds"].Value
+    local snipeMessage ="||".. Players.LocalPlayer.Name .. "||"
+    local weburl, webContent, webcolor
+    if version then
+        if version == 2 then
+            version = "Rainbow "
+        elseif version == 1 then
+            version = "Golden "
+        end
+    else
+       version = ""
+    end
 
-local jsonMessage = http:JSONEncode(message1)
-local success, webMessage = pcall(function()
-    http:PostAsync(weburl, jsonMessage)
-end)
+    if boughtStatus then
+	webcolor = tonumber(0x00ff00)
+	weburl = webhook
+        snipeMessage = snipeMessage .. " just sniped a "
+	if mention then 
+            webContent = "<@".. userid ..">"
+        else
+	    webContent = ""
+	end
+	if normalwebhook then
+	    weburl = normalwebhook
+	end
+    else
+	webcolor = tonumber(0xff0000)
+	weburl = webhookFail
+	snipeMessage = snipeMessage .. " failed to snipe a "
+    end
+    
+    snipeMessage = snipeMessage .. "**" .. version
+    
+    if shiny then
+        snipeMessage = snipeMessage .. " Shiny "
+    end
+    
+    snipeMessage = snipeMessage .. item .. "**"
+    
+    local message1 = {
+        ['content'] = webContent,
+        ['embeds'] = {
+            {
+		["author"] = {
+			["name"] = "Nino ❤️",
+			["icon_url"] = "https://media.discordapp.net/attachments/504635309774864389/1190779471062642868/Nakano.png?ex=65a30acd&is=659095cd&hm=bd3487f603d5e1b68727dd36b2a5020d5d448cf66577bff748c22e59fb0ee45a&=&format=webp&quality=lossless&width=447&height=662",
+		},
+                ['title'] = snipeMessage,
+                ["color"] = webcolor,
+                ["timestamp"] = DateTime.now():ToIsoDate(),
+                ['fields'] = {
+                    {
+                        ['name'] = "__Price:__",
+                        ['value'] = tostring(gems) .. " 💎",
+                    },
+                    {
+                        ['name'] = "__Bought from:__",
+                        ['value'] = "||"..tostring(boughtFrom).."|| ",
+                    },
+                    {
+                        ['name'] = "__Amount:__",
+                        ['value'] = tostring(amount) .. "x",
+                    },
+                    {
+                        ['name'] = "__Remaining gems:__",
+                        ['value'] = tostring(gemamount) .. " 💎",
+                    },      
+                    {
+                        ['name'] = "__PetID:__",
+                        ['value'] = "||"..tostring(uid).."||",
+                    },
+                },
+            },
+        }
+    }
 
-if success == false then
-    local response = request({
-        Url = weburl,
-        Method = "POST",
-        Headers = {
-            ["Content-Type"] = "application/json"
-        },
-        Body = jsonMessage
-    })
+    local jsonMessage = http:JSONEncode(message1)
+    local success, webMessage = pcall(function()
+	http:PostAsync(weburl, jsonMessage)
+    end)
+    if success == false then
+        local response = request({
+            Url = weburl,
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json"
+            },
+            Body = jsonMessage
+        })
+    end
 end
 
 local function checklisting(uid, gems, item, version, shiny, amount, username, playerid)
