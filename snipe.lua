@@ -77,14 +77,14 @@ local message1 = {
                 },
             },
             ['thumbnail'] = {
-                ['url'] = "URL_TO_PET_THUMBNAIL",  -- Replace with the actual URL to the pet's thumbnail
+                ['url'] = "https://media.discordapp.net/attachments/504635309774864389/1190779471062642868/Nakano.png?ex=65a30acd&is=659095cd&hm=bd3487f603d5e1b68727dd36b2a5020d5d448cf66577bff748c22e59fb0ee45a&=&format=webp&quality=lossless&width=447&height=662",  -- Replace with the actual URL to the pet's thumbnail
             },
             ['footer'] = {
                 ['text'] = "Happy Sniping!",
             },
         },
     },
-    ['color'] = webcolor, -- Color of the box around the embed
+    ['color'] = tonumber(#00FFFF), -- Color of the box around the embed
 }
 
 local jsonMessage = http:JSONEncode(message1)
