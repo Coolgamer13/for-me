@@ -176,9 +176,6 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
     elseif item == "Huge Hunter" and gems <= 100000 then
         local boughtPet, boughtMessage = purchase:InvokeServer(playerid, uid)
         processListingInfo(uid, gems, item, version, shiny, amount, username, boughtPet, ping)
-    elseif type.exclusiveLevel and price <= 100000 and item ~= "Fire Dragon Hoverboard" and item ~= "UFO" then
-        local boughtPet, boughtMessage = purchase:InvokeServer(playerid, uid)
-        processListingInfo(uid, gems, item, version, shiny, amount, username, boughtPet, ping)
     elseif string.find(item, "Superior") and price <= 100000 then
         local boughtPet, boughtMessage = purchase:InvokeServer(playerid, uid)
         processListingInfo(uid, gems, item, version, shiny, amount, username, boughtPet, ping) 
