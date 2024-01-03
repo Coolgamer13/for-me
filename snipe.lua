@@ -10,7 +10,7 @@ local PlayerInServer = #getPlayers
 local http = game:GetService("HttpService")
 local ts = game:GetService("TeleportService")
 local rs = game:GetService("ReplicatedStorage")
-local playerID
+local playerID, snipeNormal
 
 if not snipeNormalPets then
     snipeNormalPets = false
@@ -54,7 +54,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
         else
 	    webContent = ""
 	end
-	if normalwebhook then
+	if snipeNormal == true then
 	    weburl = normalwebhook
 	end
     else
@@ -77,7 +77,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
             {
 		["author"] = {
 			["name"] = "Nino ❤️",
-			["icon_url"] = "https://media.discordapp.net/attachments/504635309774864389/1190779471062642868/Nakano.png?ex=65a30acd&is=659095cd&hm=bd3487f603d5e1b68727dd36b2a5020d5d448cf66577bff748c22e59fb0ee45a&=&format=webp&quality=lossless&width=447&height=662",
+			["icon_url"] = "https://cdn.discordapp.com/attachments/1149218291957637132/1190527382583525416/new-moon-face_1f31a.png?ex=65a22006&is=658fab06&hm=55f8900eef039709c8e57c96702f8fb7df520333ec6510a81c31fc746193fbf2&",
 		},
                 ['title'] = snipeMessage,
                 ["color"] = webcolor,
@@ -104,6 +104,10 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                         ['value'] = "||"..tostring(uid).."||",
                     },
                 },
+		["footer"] = {
+                        ["icon_url"] = "https://tenor.com/view/nino-nakano-nakano-nino-go-toubun-quintiopkl-the-quintessential-quintuplets-gif-16189262426843768792", -- optional
+                        ["text"] = "NinoFTW"
+		}
             },
         }
     }
@@ -129,6 +133,7 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
     local purchase = rs.Network.Booths_RequestPurchase
     gems = tonumber(gems)
     local ping = false
+    snipeNormal = false
     local type = {}
     pcall(function()
         type = Library.Directory.Pets[item]
@@ -139,13 +144,13 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
     end
 
     local price = gems / amount
-
-    if type.huge and price <= 1000000 then
+    task.wait(3.05)
+    if type.huge and price <= 1000000 then	
         local boughtPet, boughtMessage = purchase:InvokeServer(playerid, uid)
         if boughtPet == true then
             ping = true
-        end
-        processListingInfo(uid, gems, item, version, shiny, amount, username, boughtPet, ping)
+	end    
+	processListingInfo(uid, gems, item, version, shiny, amount, username, boughtPet, ping)	
     elseif type.exclusiveLevel and price <= 10000 and item ~= "Banana" and item ~= "Coin" then
         local boughtPet, boughtMessage = purchase:InvokeServer(playerid, uid)
         processListingInfo(uid, gems, item, version, shiny, amount, username, boughtPet, ping)
