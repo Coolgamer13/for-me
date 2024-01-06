@@ -76,7 +76,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
             {
 		["author"] = {
 			["name"] = "Nino ❤️",
-			["icon_url"] = "https://cdn.discordapp.com/attachments/1149218291957637132/1190527382583525416/new-moon-face_1f31a.png?ex=65a22006&is=658fab06&hm=55f8900eef039709c8e57c96702f8fb7df520333ec6510a81c31fc746193fbf2&",
+			["icon_url"] = "https://cdn.discordapp.com/attachments/504635309774864389/1193183871513133056/nino-nakano-swinsuit.gif?ex=65abca13&is=65995513&hm=6f4b8ffa1567960dad555ea689b626f23f594faea8a1dec7ebffa6c7546b84e0&",
 		},
                 ['title'] = snipeMessage,
                 ["color"] = webcolor,
@@ -104,7 +104,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                     },
                 },
 		["footer"] = {
-                        ["icon_url"] = "https://tenor.com/view/nino-nakano-nakano-nino-go-toubun-quintiopkl-the-quintessential-quintuplets-gif-16189262426843768792", -- optional
+                        ["icon_url"] = "https://cdn.discordapp.com/attachments/504635309774864389/1193183871513133056/nino-nakano-swinsuit.gif?ex=65abca13&is=65995513&hm=6f4b8ffa1567960dad555ea689b626f23f594faea8a1dec7ebffa6c7546b84e0&", -- optional
                         ["text"] = "NinoFTW"
 		}
             },
