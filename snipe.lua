@@ -163,6 +163,9 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
             ping = true
         end
         processListingInfo(uid, gems, item, version, shiny, amount, username, boughtPet, ping)
+    elseif class == "Egg" and price <= 30000 then
+        local boughtPet, boughtMessage = purchase:InvokeServer(playerid, uid)
+        processListingInfo(uid, gems, item, version, shiny, amount, username, boughtPet, ping)
 
     -- Presents and Gifts
     elseif item == "Titanic Christmas Present" and price <= 55000 then
@@ -208,7 +211,10 @@ local function checklisting(uid, gems, item, version, shiny, amount, username, p
     elseif string.find(item, "Charm") and price <= 100000 and item ~= "Agility Charm" and item ~= "Coin Charm" and item ~= "Bonus Charm" and item ~= "Charm Stone" then
         local boughtPet, boughtMessage = purchase:InvokeServer(playerid, uid)
         processListingInfo(uid, gems, item, version, shiny, amount, username, boughtPet, ping)
-
+    elseif class == "HoverBoard" and price <= 50000 and item ~= "Cat Hoverboard" and item ~= "Rudolph Hoverboard" then
+        local boughtPet, boughtMessage = purchase:InvokeServer(playerid, uid)
+        processListingInfo(uid, gems, item, version, shiny, amount, username, boughtPet, ping) 
+                
     -- Potions
     elseif item == "The Cocktail" and gems <= 50000 then
         local boughtPet, boughtMessage = purchase:InvokeServer(playerid, uid)
