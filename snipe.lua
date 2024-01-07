@@ -196,15 +196,6 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                 return
 
                 -- Items
-            elseif item == "Crystal Key" and unitGems <= 10000 then
-                coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
-                return
-            elseif item == "Crystal Key Lower Half" and unitGems <= 5000 then
-                coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
-                return
-            elseif item == "Crystal Key Upper Half" and unitGems <= 5000 then
-                coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
-                return
             elseif string.find(item, "Charm") and unitGems <= 100000 and item ~= "Agility Charm" and item ~= "Coin Charm" and item ~= "Bonus Charm" and item ~= "Charm Stone" then
                 coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                 return
