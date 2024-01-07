@@ -271,6 +271,8 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                 elseif item == "Golden Watering Can" and unitGems <= 25000 then
                     coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                     return
+                elseif type.SuperiorLevel and unitGems <= 50000 and item ~= "Exotic Treasure Flag" then
+                    coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                 end
             end
         end
