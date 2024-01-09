@@ -3,6 +3,8 @@ Credits List
 ethereum: creating the base sniper
 chocolog: providing type.huge
 Edmond: offered tips for optimization
+
+it is very recommended to fork this and made your own config
 ]]--
 
 local osclock = os.clock()
@@ -41,28 +43,31 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     local weburl, webContent, webcolor
     local versionVal = { [1] = "Golden ", [2] = "Rainbow " }
     local versionStr = versionVal[version] or (version == nil and "")
-    local mention = (string.find(item, "Huge") or string.find(item, "Titanic")) and "<@" .. userid .. ">" or ""
+    local mention = (Library.Directory.Pets[item].huge or Library.Directory.Pets[item].titanic) and "<@" .. userid .. ">" or ""
 	
     if boughtStatus then
 	webcolor = tonumber(0x00ff00)
-	weburl = webhook
-        snipeMessage = snipeMessage .. " just sniped ".. Library.Functions.Commas(amount) .."x "
+        snipeMessage = snipeMessage .. " just sniped ".. amount .."x "
         webContent = mention
 	if snipeNormal == true then
 	    weburl = normalwebhook
 	    snipeNormal = false
+	else
+	    weburl = webhook
 	end
     else
-	webContent = failMessage
 	webcolor = tonumber(0xff0000)
 	weburl = webhookFail
-	snipeMessage = snipeMessage .. " failed to snipe ".. Library.Functions.Commas(amount) .."x "
+	snipeMessage = snipeMessage .. " failed to snipe ".. amount .."x "
 	if snipeNormal == true then
-	    weburl = normalwebhook
 	    snipeNormal = false
 	end
     end
-    
+
+    if not failMessage then
+	failMessage = "Success!"
+    end
+	
     snipeMessage = snipeMessage .. "**" .. versionStr
     
     if shiny then
@@ -76,7 +81,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
         ['embeds'] = {
             {
 		["author"] = {
-			["name"] = "Nino ❤️",
+			["name"] = "Nino❤️",
 			["icon_url"] = "https://media.discordapp.net/attachments/504635309774864389/1193328454486200331/257171465.png?ex=65ac50ba&is=6599dbba&hm=f52a4d941ab519b4659e8cdb736a3619ad836148d55e72551e8ca592f7258e08&=&format=webp&quality=lossless&width=486&height=661",
 		},
                 ['title'] = snipeMessage,
@@ -85,7 +90,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                 ['fields'] = {
                     {
                         ['name'] = "__Price:__",
-                        ['value'] = Library.Functions.ParseNumberSmart(gems) .. " 💎",
+                        ['value'] = gems .. " 💎",
                     },
                     {
                         ['name'] = "__Bought from:__",
@@ -93,20 +98,28 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                     },
                     {
                         ['name'] = "__Amount:__",
-                        ['value'] = Library.Functions.Commas(amount) .. "x",
+                        ['value'] = amount .. "x",
                     },
                     {
                         ['name'] = "__Remaining gems:__",
-                        ['value'] = Library.Functions.ParseNumberSmart(gemamount) .. " 💎",
+                        ['value'] = gemamount .. " 💎",
                     },      
                     {
                         ['name'] = "__PetID:__",
                         ['value'] = "||"..tostring(uid).."||",
                     },
+		    {
+                        ['name'] = "__Status:__",
+                        ['value'] = failMessage,
+                    },
+		    {
+                        ['name'] = "__Ping:__",
+                        ['value'] = math.round(Players.LocalPlayer:GetNetworkPing() * 2000) .. "ms",
+                    },
                 },
 		["footer"] = {
                         ["icon_url"] = "https://media.discordapp.net/attachments/504635309774864389/1193328454486200331/257171465.png?ex=65ac50ba&is=6599dbba&hm=f52a4d941ab519b4659e8cdb736a3619ad836148d55e72551e8ca592f7258e08&=&format=webp&quality=lossless&width=486&height=661", -- optional
-                        ["text"] = "Stolen by Stelly"
+                        ["text"] = "Heavily Stolen by Stelly"
 		}
             },
         }
@@ -130,7 +143,7 @@ end
 
 local function tryPurchase(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
     if buytimestamp > listTimestamp then
-      task.wait(3.04 - Players.LocalPlayer:GetNetworkPing())
+	task.wait(buytimestamp - workspace:GetServerTimeNow() - Players.LocalPlayer:GetNetworkPing())
     end
     local boughtPet, boughtMessage = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
     processListingInfo(uid, gems, item, version, shiny, amount, username, boughtPet, class, boughtMessage, snipeNormal)
@@ -165,9 +178,9 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                 local class = tostring(listing["ItemData"]["class"])
                 local unitGems = gems/amount
 		snipeNormal = false
-                                 
-                            -- Pets
-            if string.find(item, "Huge") and unitGems <= 100000 then
+				
+                -- Pets
+            if string.find(item, "Huge") and unitGems <= 300000 then
                 coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                 return
             elseif snipeNormalPets == true and gems == 1 then
@@ -196,7 +209,8 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                 return
 
                 -- Items
-            elseif string.find(item, "Charm") and unitGems <= 100000 and item ~= "Agility Charm" and item ~= "Coin Charm" and item ~= "Bonus Charm" and item ~= "Charm Stone" then
+            elseif string.find(item, "Charm") and unitGems <= 100000 then
+                if not string.find(item, "Coins") and not string.find(item, "Agility") and not string.find(item, "Bonus") then
                 coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                 return
 
@@ -237,10 +251,8 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                     return
 
                 -- Misc Items
-                elseif class == "HoverBoard" and unitGems <= 30000 and item ~= "Cat Hoverboard" and item ~= "Rudolph Hoverboard" then 
-                    coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
-                    return
-                elseif class == "Booth" and unitGems <= 10000 and item ~= "Christmas" and item ~= "Dragon" and item ~= "Rainbow" and item ~= "Gold" and item ~= "Cat" and item ~= "Egg" and item ~= "Monkey" then     
+                elseif class == "HoverBoard" and unitGems <= 30000 then
+                    if not string.find(item, "Cat Hoverboard") and not string.find(item, "Rudolph Hoverboard") then
                     coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                     return
 
@@ -253,7 +265,7 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                     return
 
                     -- Tools 
-                elseif item == "Golden Shovel" and unitGems <= 50000 then
+                elseif item == "Golden Shovel" and unitGems <= 25000 then
                     coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                     return
                 elseif item == "Golden Fishing Rod" and unitGems <= 25000 then
@@ -262,20 +274,20 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                 elseif item == "Golden Watering Can" and unitGems <= 25000 then
                     coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                     return
+	            end
                 end
             end
         end
-    end
-end)
+    end)
 
 local function jumpToServer() 
     local sfUrl = "https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=%s&limit=%s&excludeFullGames=true" 
-    local req = request({ Url = string.format(sfUrl, 15502339080, "Desc", 100) }) 
+    local req = request({ Url = string.format(sfUrl, 15502339080, "Desc", 50) }) 
     local body = http:JSONDecode(req.Body) 
-    local deep = math.random(1, 2)
+    local deep = math.random(1, 3)
     if deep > 1 then 
         for i = 1, deep, 1 do 
-             req = request({ Url = string.format(sfUrl .. "&cursor=" .. body.nextPageCursor, 15502339080, "Desc", 100) }) 
+             req = request({ Url = string.format(sfUrl .. "&cursor=" .. body.nextPageCursor, 15502339080, "Desc", 50) }) 
              body = http:JSONDecode(req.Body) 
              task.wait(0.1)
         end 
@@ -332,7 +344,7 @@ Players.PlayerAdded:Connect(function(player)
     end
 end) 
 
-local hopDelay = math.random(720, 1080)
+local hopDelay = math.random(720, 960)
 
 while task.wait(1) do
     if math.floor(os.clock() - osclock) >= hopDelay then
