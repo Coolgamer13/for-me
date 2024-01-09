@@ -1,12 +1,3 @@
---[[
-Credits List
-ethereum: creating the base sniper
-chocolog: providing type.huge
-Edmond: offered tips for optimization
-
-it is very recommended to fork this and made your own config
-]]--
-
 local osclock = os.clock()
 if not game:IsLoaded() then
     game.Loaded:Wait()
