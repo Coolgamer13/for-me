@@ -39,7 +39,7 @@ end)
 local function processListingInfo(uid, gems, item, version, shiny, amount, boughtFrom, boughtStatus, class, failMessage, snipeNormal)
     local gemamount = Players.LocalPlayer.leaderstats["💎 Diamonds"].Value
     local snipeMessage ="||".. Players.LocalPlayer.Name .. "||"
-    local weburl, webContent, webcolor
+    local weburl, webContent, webcolor, webStatus
     local versionVal = { [1] = "Golden ", [2] = "Rainbow " }
     local versionStr = versionVal[version] or (version == nil and "")
     local mention = (Library.Directory.Pets[item].huge or Library.Directory.Pets[item].titanic) and "<@" .. userid .. ">" or ""
@@ -48,6 +48,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
 	webcolor = tonumber(0x00ff00)
         snipeMessage = snipeMessage .. " just sniped ".. amount .."x "
         webContent = mention
+	webStatus = "Success!"
 	weburl = webhook
 	if snipeNormal == true then
 	    weburl = normalwebhook
@@ -56,7 +57,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     else
 	webcolor = tonumber(0xff0000)
 	weburl = webhookFail
-	webContent = failMessage
+	webStatus = failMessage
 	snipeMessage = snipeMessage .. " failed to snipe ".. amount .."x "
 	if snipeNormal == true then
 	    snipeNormal = false
@@ -76,8 +77,8 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
         ['embeds'] = {
             {
 		["author"] = {
-			["name"] = "Nino ❤️",
-			["icon_url"] = "https://media.discordapp.net/attachments/504635309774864389/1193328454486200331/257171465.png?ex=65ac50ba&is=6599dbba&hm=f52a4d941ab519b4659e8cdb736a3619ad836148d55e72551e8ca592f7258e08&=&format=webp&quality=lossless&width=486&height=661",
+			["name"] = "Boor Sniper 🌚",
+			["icon_url"] = "https://cdn.discordapp.com/attachments/1149218291957637132/1190527382583525416/new-moon-face_1f31a.png?ex=65a22006&is=658fab06&hm=55f8900eef039709c8e57c96702f8fb7df520333ec6510a81c31fc746193fbf2&",
 		},
                 ['title'] = snipeMessage,
                 ["color"] = webcolor,
@@ -104,13 +105,17 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                         ['value'] = "||"..tostring(uid).."||",
                     },
 		    {
+                        ['name'] = "__Status:__",
+                        ['value'] = webStatus,
+                    },
+		    {
                         ['name'] = "__Ping:__",
                         ['value'] = math.round(Players.LocalPlayer:GetNetworkPing() * 2000) .. "ms",
                     }
                 },
 		["footer"] = {
-                        ["icon_url"] = "https://media.discordapp.net/attachments/504635309774864389/1193328454486200331/257171465.png?ex=65ac50ba&is=6599dbba&hm=f52a4d941ab519b4659e8cdb736a3619ad836148d55e72551e8ca592f7258e08&=&format=webp&quality=lossless&width=486&height=661", -- optional
-                        ["text"] = "Heavily Stolen by Stelly"
+                        ["icon_url"] = "https://cdn.discordapp.com/attachments/1149218291957637132/1190527382583525416/new-moon-face_1f31a.png?ex=65a22006&is=658fab06&hm=55f8900eef039709c8e57c96702f8fb7df520333ec6510a81c31fc746193fbf2&", -- optional
+                        ["text"] = "Heavily Modified by Root"
 		}
             },
         }
@@ -264,7 +269,7 @@ local function jumpToServer()
     ts:TeleportToPlaceInstance(15502339080, servers[math.random(1, randomCount)], game:GetService("Players").LocalPlayer) 
 end
 
-if PlayerInServer < 25 then
+if PlayerInServer < 30 then
     while task.wait(10) do
 	jumpToServer()
     end
@@ -283,7 +288,7 @@ end
 Players.PlayerRemoving:Connect(function(player)
     getPlayers = Players:GetPlayers()
     PlayerInServer = #getPlayers
-    if PlayerInServer < 25 then
+    if PlayerInServer < 30 then
         while task.wait(10) do
 	    jumpToServer()
 	end
@@ -301,7 +306,7 @@ Players.PlayerAdded:Connect(function(player)
     end
 end) 
 
-local hopDelay = math.random(720, 960)
+local hopDelay = math.random(720, 1000)
 
 while task.wait(1) do
     if math.floor(os.clock() - osclock) >= hopDelay then
