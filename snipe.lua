@@ -1,10 +1,18 @@
+--[[
+Credits List
+ethereum: creating the base sniper
+chocolog: providing type.huge
+Edmond: offered tips for optimization
+
+it is very recommended to fork this and made your own config
+]]--
+
 local osclock = os.clock()
 if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
-task.wait(20) -- i hate library loading
-
+task.wait(15)
 game.Players.LocalPlayer.PlayerScripts.Scripts.Core["Idle Tracking"].Enabled = false
 game:GetService("RunService"):Set3dRenderingEnabled(false)
 local Booths_Broadcast = game:GetService("ReplicatedStorage").Network:WaitForChild("Booths_Broadcast")
@@ -40,23 +48,19 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
 	webcolor = tonumber(0x00ff00)
         snipeMessage = snipeMessage .. " just sniped ".. amount .."x "
         webContent = mention
+	weburl = webhook
 	if snipeNormal == true then
 	    weburl = normalwebhook
 	    snipeNormal = false
-	else
-	    weburl = webhook
 	end
     else
 	webcolor = tonumber(0xff0000)
 	weburl = webhookFail
+	webContent = failMessage
 	snipeMessage = snipeMessage .. " failed to snipe ".. amount .."x "
 	if snipeNormal == true then
 	    snipeNormal = false
 	end
-    end
-
-    if not failMessage then
-	failMessage = "Success!"
     end
 	
     snipeMessage = snipeMessage .. "**" .. versionStr
@@ -72,7 +76,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
         ['embeds'] = {
             {
 		["author"] = {
-			["name"] = "Nino❤️",
+			["name"] = "Nino ❤️",
 			["icon_url"] = "https://media.discordapp.net/attachments/504635309774864389/1193328454486200331/257171465.png?ex=65ac50ba&is=6599dbba&hm=f52a4d941ab519b4659e8cdb736a3619ad836148d55e72551e8ca592f7258e08&=&format=webp&quality=lossless&width=486&height=661",
 		},
                 ['title'] = snipeMessage,
@@ -85,7 +89,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                     },
                     {
                         ['name'] = "__Bought from:__",
-                        ['value'] = "||"..tostring(boughtFrom).."|| ",
+                        ['value'] = "||"..tostring(boughtFrom).."||",
                     },
                     {
                         ['name'] = "__Amount:__",
@@ -100,13 +104,9 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                         ['value'] = "||"..tostring(uid).."||",
                     },
 		    {
-                        ['name'] = "__Status:__",
-                        ['value'] = failMessage,
-                    },
-		    {
                         ['name'] = "__Ping:__",
                         ['value'] = math.round(Players.LocalPlayer:GetNetworkPing() * 2000) .. "ms",
-                    },
+                    }
                 },
 		["footer"] = {
                         ["icon_url"] = "https://media.discordapp.net/attachments/504635309774864389/1193328454486200331/257171465.png?ex=65ac50ba&is=6599dbba&hm=f52a4d941ab519b4659e8cdb736a3619ad836148d55e72551e8ca592f7258e08&=&format=webp&quality=lossless&width=486&height=661", -- optional
