@@ -22,7 +22,7 @@ local PlayerInServer = #getPlayers
 local http = game:GetService("HttpService")
 local ts = game:GetService("TeleportService")
 local rs = game:GetService("ReplicatedStorage")
-local snipeNormal
+local snipeNormal, signal
 local Library = require(rs:WaitForChild("Library"))
 
 if snipeNormalPets == nil then
@@ -42,7 +42,7 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
     local weburl, webContent, webcolor, webStatus
     local versionVal = { [1] = "Golden ", [2] = "Rainbow " }
     local versionStr = versionVal[version] or (version == nil and "")
-    local mention = (Library.Directory.Pets[item].huge or Library.Directory.Pets[item].titanic) and "<@" .. userid .. ">" or ""
+    local mention = ( class == "Pet" and (Library.Directory.Pets[item].huge or Library.Directory.Pets[item].titanic)) and "<@" .. userid .. ">" or ""
 	
     if boughtStatus then
 	webcolor = tonumber(0x00ff00)
@@ -77,8 +77,8 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
         ['embeds'] = {
             {
 		["author"] = {
-			["name"] = "Boor Sniper 🌚",
-			["icon_url"] = "https://cdn.discordapp.com/attachments/1149218291957637132/1190527382583525416/new-moon-face_1f31a.png?ex=65a22006&is=658fab06&hm=55f8900eef039709c8e57c96702f8fb7df520333ec6510a81c31fc746193fbf2&",
+			["name"] = Nino ❤️",
+			["icon_url"] = "https://media.discordapp.net/attachments/504635309774864389/1193328454486200331/257171465.png?ex=65ac50ba&is=6599dbba&hm=f52a4d941ab519b4659e8cdb736a3619ad836148d55e72551e8ca592f7258e08&=&format=webp&quality=lossless&width=486&height=661",
 		},
                 ['title'] = snipeMessage,
                 ["color"] = webcolor,
@@ -114,8 +114,8 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                     }
                 },
 		["footer"] = {
-                        ["icon_url"] = "https://cdn.discordapp.com/attachments/1149218291957637132/1190527382583525416/new-moon-face_1f31a.png?ex=65a22006&is=658fab06&hm=55f8900eef039709c8e57c96702f8fb7df520333ec6510a81c31fc746193fbf2&", -- optional
-                        ["text"] = "Heavily Modified by Root"
+                        ["icon_url"] = "https://media.discordapp.net/attachments/504635309774864389/1193328454486200331/257171465.png?ex=65ac50ba&is=6599dbba&hm=f52a4d941ab519b4659e8cdb736a3619ad836148d55e72551e8ca592f7258e08&=&format=webp&quality=lossless&width=486&height=661", -- optional
+                        ["text"] = "Heavily Stolen by Stelly"
 		}
             },
         }
@@ -138,10 +138,14 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
 end
 
 local function tryPurchase(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
-    if buytimestamp > listTimestamp then
-	task.wait(buytimestamp - workspace:GetServerTimeNow() - Players.LocalPlayer:GetNetworkPing())
-    end
-    local boughtPet, boughtMessage = game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    signal = game:GetService("RunService").Heartbeat:Connect(function()
+	if buytimestamp < workspace:GetServerTimeNow() - Players.LocalPlayer:GetNetworkPing() then
+	    signal:Disconnect()
+	    signal = nil
+        end
+    end)
+    repeat task.wait() until signal == nil
+    local boughtPet, boughtMessage = rs.Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
     processListingInfo(uid, gems, item, version, shiny, amount, username, boughtPet, class, boughtMessage, snipeNormal)
 end
 
@@ -175,10 +179,10 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                 local unitGems = gems/amount
 		snipeNormal = false
 				
-                if string.find(item, "Huge") and unitGems <= 300000 then
+                if string.find(item, "Huge") and unitGems <= 1000000 then
                     coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                     return
-		elseif ((string.find(item, "Charm") and not string.find(item, "Agility")) or string.find(item, "Coins")) or string.find(item, "Bonus")) and unitGems <= 2500 then
+		elseif string.find(item, "Charm") and unitGems <= 15000 then
                     coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                     return
                 elseif snipeNormalPets == true and gems == 1 then
@@ -224,13 +228,10 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                     elseif item == "Massive Comet" then
                         coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                         return
-                    elseif item == "Huge Hunter" then
-                        coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
-                        return
 		    elseif item == "Super Lightning" then
                         coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                         return
-                    elseif item == "Massive Comet" and unitGems <= 100000 then
+                    elseif item == "Huge Hunter" then
                         coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                         return
 		    elseif item == "Shiny Hunter" then
