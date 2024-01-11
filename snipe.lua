@@ -77,8 +77,8 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
         ['embeds'] = {
             {
 		["author"] = {
-			["name"] = Nino ❤️",
-			["icon_url"] = "https://media.discordapp.net/attachments/504635309774864389/1193328454486200331/257171465.png?ex=65ac50ba&is=6599dbba&hm=f52a4d941ab519b4659e8cdb736a3619ad836148d55e72551e8ca592f7258e08&=&format=webp&quality=lossless&width=486&height=661",
+			["name"] = "Boor Sniper 🌚",
+			["icon_url"] = "https://cdn.discordapp.com/attachments/1149218291957637132/1190527382583525416/new-moon-face_1f31a.png?ex=65a22006&is=658fab06&hm=55f8900eef039709c8e57c96702f8fb7df520333ec6510a81c31fc746193fbf2&",
 		},
                 ['title'] = snipeMessage,
                 ["color"] = webcolor,
@@ -114,8 +114,8 @@ local function processListingInfo(uid, gems, item, version, shiny, amount, bough
                     }
                 },
 		["footer"] = {
-                        ["icon_url"] = "https://media.discordapp.net/attachments/504635309774864389/1193328454486200331/257171465.png?ex=65ac50ba&is=6599dbba&hm=f52a4d941ab519b4659e8cdb736a3619ad836148d55e72551e8ca592f7258e08&=&format=webp&quality=lossless&width=486&height=661", -- optional
-                        ["text"] = "Heavily Stolen by Stelly"
+                        ["icon_url"] = "https://cdn.discordapp.com/attachments/1149218291957637132/1190527382583525416/new-moon-face_1f31a.png?ex=65a22006&is=658fab06&hm=55f8900eef039709c8e57c96702f8fb7df520333ec6510a81c31fc746193fbf2&", -- optional
+                        ["text"] = "Heavily Modified by Root"
 		}
             },
         }
@@ -179,7 +179,7 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                 local unitGems = gems/amount
 		snipeNormal = false
 				
-                if string.find(item, "Huge") and unitGems <= 1000000 then
+                if string.find(item, "Huge") and unitGems <= 300000 then
                     coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                     return
 		elseif string.find(item, "Charm") and unitGems <= 15000 then
@@ -194,10 +194,10 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                     if type.exclusiveLevel and unitGems <= 30000 and item ~= "Banana" and item ~= "Coin" then
                         coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                         return
-                    elseif type.titanic and unitGems <= 1000000 then
+                    elseif type.titanic and unitGems <= 10000000 then
 			coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                         return
-                    elseif type.huge and unitGems <= 300000 then
+                    elseif type.huge and unitGems <= 1000000 then
 			coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                         return
 		    end
@@ -228,10 +228,7 @@ Booths_Broadcast.OnClientEvent:Connect(function(username, message)
                     elseif item == "Massive Comet" then
                         coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                         return
-		    elseif item == "Super Lightning" then
-                        coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
-                        return
-                    elseif item == "Huge Hunter" then
+		    elseif item == "Huge Hunter" then
                         coroutine.wrap(tryPurchase)(uid, gems, item, version, shiny, amount, username, class, playerid, buytimestamp, listTimestamp, snipeNormal)
                         return
 		    elseif item == "Shiny Hunter" then
